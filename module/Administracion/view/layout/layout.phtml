@@ -1,0 +1,135 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <?php echo $this->headTitle('ZF2 ' . $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
+
+        <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
+
+        <!-- Le styles -->
+        <?php
+        echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
+                ->prependStylesheet($this->basePath() . '/css/bootstrap-responsive.min.css')
+                ->prependStylesheet($this->basePath() . '/css/administracion.css')
+                ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css')
+        ?>
+
+        <!-- Scripts -->
+        <?php
+        echo $this->headScript()->prependFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+                ->prependFile($this->basePath() . '/js/scripts.js')
+                ->prependFile($this->basePath() . '/js/noty/themes/default.js')
+                ->prependFile($this->basePath() . '/js/noty/layouts/topRight.js')
+                ->prependFile($this->basePath() . '/js/noty/layouts/topLeft.js')
+                ->prependFile($this->basePath() . '/js/noty/layouts/topCenter.js')
+                ->prependFile($this->basePath() . '/js/noty/layouts/top.js')
+                ->prependFile($this->basePath() . '/js/noty/layouts/inline.js')
+                ->prependFile($this->basePath() . '/js/noty/layouts/centerRight.js')
+                ->prependFile($this->basePath() . '/js/noty/layouts/centerLeft.js')
+                ->prependFile($this->basePath() . '/js/noty/layouts/center.js')
+                ->prependFile($this->basePath() . '/js/noty/layouts/bottomRight.js')
+                ->prependFile($this->basePath() . '/js/noty/layouts/bottomLeft.js')
+                ->prependFile($this->basePath() . '/js/noty/layouts/bottomCenter.js')
+                ->prependFile($this->basePath() . '/js/noty/layouts/bottom.js')
+                ->prependFile($this->basePath() . '/js/noty/jquery.noty.js')
+                ->prependFile($this->basePath() . '/js/bootstrap.min.js')
+                ->prependFile($this->basePath() . '/js/jquery.min.js')
+        ?>
+
+    </head>
+    <body>
+        <?php
+            $arrayController = $this->viewModel()->getCurrent()->getChildren();
+            $arrayData = $arrayController[0]->getVariables();
+            $objUser = $arrayData['objUser'];
+            $config = $arrayData['config'];
+            $arrayModulo = $arrayData['modulo'];
+        ?>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container-fluid">
+                    <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="brand" href="#" title="<?php echo $config['siteNameLarge'] ?>"><?php echo $config['siteNameSmall'] ?></a>
+                    <div class="nav-collapse collapse">
+                        <p class="navbar-text pull-right">
+                            Logged in as <a href="#" class="navbar-link"><?php echo $objUser->chr_nombre ?></a>
+                        </p>
+                        <ul class="nav">
+                            <!--<li class="active"><a href="#">Home</a></li>-->
+                            <?php if (count($arrayModulo) > 0) { ?>
+                                <?php foreach ($arrayModulo as $index => $modulo) { ?>
+                                    <?php $class_active = (isset($modulo['active'])&&$modulo['active'])? 'class="active"':''; ?>
+                                    <li <?php echo $class_active ?>><a href="<?php echo $arrayData['url'].DIRECTORY_SEPARATOR.$modulo['chr_nombre'] ?>"><?php echo $modulo['chr_nombre_publico'] ?></a></li>
+                                <?php } ?>
+                            <?php } ?>
+                            <li><a href="/seguridad/index/logout">Logout</a></li>
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span3">
+                    <div class="well sidebar-nav">
+                        <ul class="nav nav-list">
+                            <?php 
+                                //obtenemos los menus del  modulo
+                                foreach ($arrayModulo as $indice=>$listaModulo){
+                                    if($listaModulo['chr_nombre'] == $arrayData['package']){
+                                        $arrayMenuPackage = $listaModulo;
+                                    }
+                                }
+                                $arrayMenu = $arrayMenuPackage['menu'];
+                                if(count($arrayMenu)>0){
+                                    foreach ($arrayMenu as $index=>$menu){
+                                        echo '<li class="nav-header">'.$menu['chr_nombre'].'</li>';
+                                        if(count($menu['submenu'])>0){
+                                            foreach($menu['submenu'] as $indice=>$submenu){
+                                                $class_active_submenu = '';
+                                                if(isset($arrayData['id'])&&$submenu['id'] == $arrayData['id']){
+                                                    $class_active_submenu = 'class="active"';
+                                                }
+                                                echo '<li '.$class_active_submenu.'><a href="'.$arrayData['url'].$submenu['chr_url'].'">'.$submenu['chr_nombre'].'</a></li>';
+                                            }
+                                        }
+                                    }
+                                }
+                            ?>
+<!--                        <li class="nav-header">Sidebar</li>
+                            <li class="active"><a href="#">Link</a></li>
+                            <li><a href="#">Link</a></li>
+                            <li><a href="#">Link</a></li>
+                            <li><a href="#">Link</a></li>
+                            <li class="nav-header">Sidebar</li>
+                            <li><a href="#">Link</a></li>
+                            <li><a href="#">Link</a></li>
+                            <li><a href="#">Link</a></li>
+                            <li><a href="#">Link</a></li>
+                            <li><a href="#">Link</a></li>
+                            <li><a href="#">Link</a></li>
+                            <li class="nav-header">Sidebar</li>
+                            <li><a href="#">Link</a></li>
+                            <li><a href="#">Link</a></li>
+                            <li><a href="#">Link</a></li>-->
+                        </ul>
+                    </div><!--/.well -->
+                </div><!--/span-->
+                <div class="span9">
+                    <?php echo $this->content; ?>
+                </div><!--/span-->
+            </div><!--/row-->
+            <footer class="navbar navbar-fixed-bottom">
+                <p>&copy; Company 2013</p>
+            </footer>
+
+        </div>
+<?php echo $this->inlineScript() ?>
+    </body>
+</html>

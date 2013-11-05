@@ -1,0 +1,36 @@
+<h1>Lista modulos</h1>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th></th>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Activo</th>
+            <th>Orden</th>
+            <th>acciones</th>            
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (count($this->lista_modulos) > 0) {
+            foreach ($this->lista_modulos as $indice => $modulo) {
+                ?>
+                <tr id="module_<?php echo $modulo['id'] ?>">
+                    <td></td>
+                    <td><?php echo intval($indice+1, 10) ?></td>
+                    <td><?php echo $modulo['chr_nombre_publico'] ?></td>
+                    <td><?php echo intval($modulo['bool_active'], 10) ?></td>
+                    <td><?php echo intval($modulo['int_order'], 10) ?></td>
+                    <td><a href="modulos/editar/<?php echo $modulo['id'] ?>">Editar</a>&nbsp;|&nbsp;<a href="#" onclick="delete_module(<?php echo $modulo['id'] ?>);return false;">Eliminar</a></td>
+                </tr>
+                <?php
+            }
+        }
+        ?>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="6"></td>
+        </tr>
+    </tfoot>
+</table>

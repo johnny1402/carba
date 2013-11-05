@@ -1,0 +1,45 @@
+<?php
+
+$form = $this->form;
+$form->prepare();
+
+//$form->setAttribute('action', $this->url('seguridad/Index/recibe'));
+//$form->setAttribute('method', 'post');
+$form->setAttributes(array(
+    //'action' => '/seguridad/index/validate',
+    'action' => '',
+    'method' => 'post',
+    'class' => 'form-signin'
+));
+
+$formLabel = $this->plugin('formLabel');
+
+echo $this->form()->openTag($form);
+?>
+<h2 class="form-signin-heading"><?php echo $title ?></h2>
+<?php
+$name = $form->get('txtUser');
+//echo $formLabel->openTag().$name->getOption('label');
+echo $this->formInput($name);
+echo $this->formElementErrors($name);
+echo $formLabel->closeTag();
+?>
+<?php
+$password = $form->get('txtPassword');
+//echo $formLabel->openTag().$email->getOption('label');
+echo $this->formInput($password);
+echo $this->formElementErrors($password);
+echo $formLabel->closeTag();
+?>
+<?php
+$btnSubmit = $form->get('btnSubmit');
+//echo $formLabel->openTag().$email->getOption('label');
+echo $this->formInput($btnSubmit);
+echo $formLabel->closeTag();
+?>
+<?php echo $this->form()->closeTag(); ?>
+<?php
+    if($this->mensaje){
+        echo $this->mensaje;
+    }
+?>
