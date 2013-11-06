@@ -140,6 +140,7 @@ class Submenu extends TableGateway {
             $objSubmenu->int_order = '';
             $objSubmenu->int_menu_id = 1;
             $objSubmenu->int_modulo_id = 1;
+            $objSubmenu->chr_url = '';
             $row = $objSubmenu;
         } else {
             $where = new \Zend\Db\Sql\Where();
