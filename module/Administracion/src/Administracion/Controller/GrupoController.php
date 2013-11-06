@@ -191,22 +191,27 @@ class GrupoController extends AbstractActionController {
         $this->dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
         if ($this->getRequest()->isXmlHttpRequest()) {
             $post = $this->getRequest()->getPost();
-            $isDeleted = TRUE;
+            $isDeleted = FALSE;
+            if ($this->isRemovable($post['grupo_id'])) {
+                $isDeleted = TRUE;
+            }            
             //verificamos si se puede eliminar y procedemos a eliminar
-            $this->deleteMenu($post['menu_id']);
+            if($isDeleted){
+                $this->deleteGrupo($post['grupo_id']);
+            }
             $data = array('result' => $isDeleted);
             return $this->getResponse()->setContent(Json::encode($data));
         }
     }
 
     /**
-     * Método para eliminar el menu directamente en la Base de datos
+     * Método para eliminar el grupo directamente en la Base de datos
      * @author Johnny Huamani <johnny1402@gmail.com>
-     * @param int $module_id
+     * @param int $grupo_id
      */
-    private function deleteMenu($menu_id) {
-        $objModelModule = new Menu($this->dbAdapter);
-        $objModelModule->deleleMenu($menu_id);
+    private function deleteGrupo($grupo_id) {
+        $objModelGrupo = new Grupo($this->dbAdapter);
+        $objModelGrupo->deleteGrupo($grupo_id);
     }
 
     /**
@@ -217,9 +222,10 @@ class GrupoController extends AbstractActionController {
     public function editarAction() {
         $this->dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
         $message = "";
-        $menu_id = (int) $this->params()->fromRoute('id', 0);
-        $objModelMenu = new Menu($this->dbAdapter);
-        $arrayMenu = $objModelMenu->getMenuById($menu_id);
+        $grupo_id = (int) $this->params()->fromRoute('id', 0);
+        $objModelGrupo = new Grupo($this->dbAdapter);
+        $arrayGrupo = $objModelGrupo->getGrupoById($grupo_id);
+        $this->vd($arrayGrupo);die();
         $this->iniciar();
         $form = new FormMenu('formMenu');
         $this->title = 'Editar menú';
@@ -250,7 +256,7 @@ class GrupoController extends AbstractActionController {
             "id" => $this->id,
             "form" => $form,
             "title" => $this->title,
-            "objMenu" => $arrayMenu,
+            "objMenu" => $arrayGrupo,
             "message" => $message,
             "lista_modulos" => $this->lista_modulos
         ));
@@ -292,6 +298,19 @@ class GrupoController extends AbstractActionController {
         //var_dump($returnValue);
         return $returnValue;
     }
+    
+    /**
+     * Método para verificar si este grupo se puede eliminar
+     * @author Johnny Huamani <johnny1402@gmail.com>
+     * @param type $module_id
+     * @return boolean
+     */
+    private function isRemovable($grupo_id) {
+        $returValue = FALSE;
+        $objModelGrupo = new Grupo($this->dbAdapter);
+        $returValue = $objModelGrupo->isRemovable($grupo_id);
+        return $returValue;
+    }    
 
     private function vd($var) {
         echo "<pre>";
