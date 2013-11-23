@@ -20,6 +20,8 @@ use Administracion\Model\Entity\Menu;
 use Administracion\Model\Entity\Modulo;
 use Administracion\Model\Entity\Grupo;
 use Zend\Json\Json;
+use Administracion\Form\FormGrupo;
+use Administracion\Form\FormGrupoValidate;
 
 
 /**
@@ -101,12 +103,16 @@ class GrupoController extends AbstractActionController {
             return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/seguridad');
         }
         //$this->user = $session->user; 
-
+       
         $this->modulos = $this->getModulo($this->user->id);
+         
         $config = new Config($this->dbAdapter);
         $this->config = $config->getConfig();
+        
         $this->lista_modulos = $this->getPackage();
+        
         $uri = $this->getRequest()->getUri();
+        
         //seteamos el valor del identificador del submenu
         $this->setValueId($uri->getPath());
         $this->base = sprintf('%s://%s', $uri->getScheme(), $uri->getHost());
@@ -178,7 +184,6 @@ class GrupoController extends AbstractActionController {
             $this->setId($submenu->id);
         } else {
             $session = new Container('seguridad');
-            $this->vd($session);
             $this->setId($session->submenu_id);
         }
     }
@@ -225,21 +230,22 @@ class GrupoController extends AbstractActionController {
         $grupo_id = (int) $this->params()->fromRoute('id', 0);
         $objModelGrupo = new Grupo($this->dbAdapter);
         $arrayGrupo = $objModelGrupo->getGrupoById($grupo_id);
-        $this->vd($arrayGrupo);die();
+        
         $this->iniciar();
-        $form = new FormMenu('formMenu');
-        $this->title = 'Editar menú';
+        
+        $form = new FormGrupo('formGrupo');
+        $this->title = 'Editar grupo';
         //verificamos si hay un request
         $objRequest = $this->getRequest();
         if ($objRequest->isPost()) {
-            $objFormModuleValidate = new FormMenuValidate();
-            $form->setValidationGroup(array('chr_nombre', 'int_order', 'csrf', 'int_modulo_id'));
+            $objFormModuleValidate = new FormGrupoValidate();
+            $form->setValidationGroup(array('chr_nombre_publico', 'int_order', 'csrf'));
             $form->setInputFilter($objFormModuleValidate->getInputFilter());
             $form->setData($objRequest->getPost());
             if ($form->isValid()) {
                 //ahora despues de validar los datos del formulario iniciamos la actualización
-                $this->saveMenu($objRequest->getPost());
-                return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/administracion/menus');
+                $this->saveGrupo($objRequest->getPost());
+                return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/administracion/grupo');
                 //return $this->forward()->dispatch('Administracion\Controller\Index', array('action'=>'index'));
             } else {
                 $message = "Ocurrio algún error";
@@ -256,7 +262,7 @@ class GrupoController extends AbstractActionController {
             "id" => $this->id,
             "form" => $form,
             "title" => $this->title,
-            "objMenu" => $arrayGrupo,
+            "objGrupo" => $arrayGrupo,
             "message" => $message,
             "lista_modulos" => $this->lista_modulos
         ));
@@ -267,9 +273,9 @@ class GrupoController extends AbstractActionController {
      * @author Johnny Huamani <johnny1402@gmail.com>
      * @param object $objPost
      */
-    private function saveMenu($objPost) {
-        $objModelModule = new Menu($this->dbAdapter);
-        $objModelModule->saveMenu($objPost);
+    private function saveGrupo($objPost) {
+        $objModelGrupo = new Grupo($this->dbAdapter);
+        $objModelGrupo->saveGrupo($objPost);
     }
 
     /**
@@ -277,7 +283,7 @@ class GrupoController extends AbstractActionController {
      * @author Johnny Huamani <johnny1402@gmail.com>
      */
     public function nuevoAction() {
-        return $this->forward()->dispatch('Administracion\Controller\Menus', array('action' => 'editar'));
+        return $this->forward()->dispatch('Administracion\Controller\Grupo', array('action' => 'editar'));
     }
 
     /**

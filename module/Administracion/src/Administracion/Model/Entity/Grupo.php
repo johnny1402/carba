@@ -5,6 +5,7 @@ namespace Administracion\Model\Entity;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Select;
+use Zend\Session\Container;
 
 class Grupo extends TableGateway {
 
@@ -70,7 +71,53 @@ class Grupo extends TableGateway {
             $row = $rowset->current();
         }
         return $row;
-    }  
+    }
+    
+    /**
+     * Método para registrar y/o actualizar un menu
+     * @author Johnny Huamani <johnny1402@gmail.com>
+     * @param array $form
+     */
+    public function saveGrupo($form) {
+        $session = new Container('seguridad');
+        if (isset($form['bool_active'])) {
+            $form['bool_active'] = 1;
+        } else {
+            $form['bool_active'] = 0;
+        }
+        if ($form['id'] == 0) {
+            $form['id_user_creacion'] = $session->user->id;
+            $form['fecha_creacion'] = date("Y-m-d H:i:s");
+            $data = array(
+                'chr_nombre' => $form['chr_nombre'],
+                'chr_nombre_publico' => $form['chr_nombre_publico'],
+                'bool_active' => $form['bool_active'],
+                'int_order' => $form['int_order'],
+                'fecha_creacion' => date("Y-m-d H:i:s"),
+                'id_user_creacion' => $form['id_user_creacion']
+            );
+        } else {
+            $data = array(
+                'bool_active' => $form['bool_active'],
+                'int_order' => $form['int_order'],
+                'chr_nombre_publico' => $form['chr_nombre_publico'],
+                'id_user_actualizacion' => $session->user->id,
+                'fecha_actualizacion' => date("Y-m-d H:i:s")
+            );
+        }
+
+        $id = (int) $form['id'];
+        if ($id == 0) {
+            $this->insert($data);
+        } else {
+            if ($this->getGrupoById($id)) {
+                $this->update($data, array('id' => $id));
+            } else {
+                throw new \Exception('El Grupo no existe');
+            }
+        }
+    }    
+    
     /**
      * Método para imprimir variables
      * @author Johnny Huamani <johnny1402@gmail.com>
