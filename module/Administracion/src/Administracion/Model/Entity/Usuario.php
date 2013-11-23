@@ -48,25 +48,33 @@ class Usuario extends TableGateway {
     }
     
     /**
-     * Método para obtener el grupo por su ID
+     * Método para obtener el usuario por su ID
      * @author Johnny Huamani <johnny1402@gmail.com>
      * @return array
      */
-    public function getGrupoById($grupo_id) {
-        if ($grupo_id == 0) {
-            $objGrupo = new \stdClass();
-            $objGrupo->id=0;
-            $objGrupo->chr_nombre='';
-            $objGrupo->chr_nombre_publico='';
-            $objGrupo->bool_active='1';
-            $objGrupo->int_order='';
-            $objGrupo->fecha_creacion=date("Y-m-d Y:i:s");
-            //$objGrupo->id_user_creacion
-            //$objGrupo->is_deleted            
+    public function getUserById($user_id) {
+        if ($user_id == 0) {
+            $objUser = new \stdClass();
+            $objUser->id=0;
+            $objUser->chr_usuario='';
+            $objUser->chr_password='';
+            $objUser->bool_active='1';
+            $objUser->chr_nombre='';
+            $objUser->chr_apellido_paterno='';
+            $objUser->chr_apellido_materno='';
+            $objUser->date_fecha_nacimiento='';
+            $objUser->chr_dni='';
+            $objUser->chr_telefono='';
+            $objUser->chr_domicilio='';
+            $objUser->date_fecha_registro='';
+            $objUser->date_fecha_actualizacion='';
+            $objUser->int_usuario_actualizacion='';
+            $objUser->chr_email='';
+            $objUser->is_deleted=1;
             $row = $objGrupo;
         } else {
             $where = new \Zend\Db\Sql\Where();
-            $where->equalTo('id', $grupo_id);
+            $where->equalTo('id', $user_id);
             $rowset = $this->select($where);
             $row = $rowset->current();
         }

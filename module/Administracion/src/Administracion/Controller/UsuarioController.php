@@ -21,8 +21,8 @@ use Administracion\Model\Entity\Modulo;
 use Administracion\Model\Entity\Grupo;
 use Administracion\Model\Entity\Usuario;
 use Zend\Json\Json;
-use Administracion\Form\FormUsuario;
-use Administracion\Form\FormUsuarioValidate;
+use Administracion\Form\FormUser;
+use Administracion\Form\FormUserValidate;
 
 
 /**
@@ -221,21 +221,19 @@ class UsuarioController extends AbstractActionController {
     }
 
     /**
-     * Método para vargar la vista de edición de menus
+     * Método para vargar la vista de edición de usuarios
      * @author Johnny Huamani <johnny1402@gmail.com>
-     * @param int $module_id
      */
     public function editarAction() {
         $this->dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
         $message = "";
-        $grupo_id = (int) $this->params()->fromRoute('id', 0);
-        $objModelGrupo = new Grupo($this->dbAdapter);
-        $arrayGrupo = $objModelGrupo->getGrupoById($grupo_id);
-        
+        $user_id = (int) $this->params()->fromRoute('id', 0);
+        $objModelUser = new Usuario($this->dbAdapter);
+        $arrayUser = $objModelUser->getUserById($user_id);
         $this->iniciar();
         
-        $form = new FormGrupo('formGrupo');
-        $this->title = 'Editar grupo';
+        $form = new FormUser('formUser');
+        $this->title = 'Editar usuario';
         //verificamos si hay un request
         $objRequest = $this->getRequest();
         if ($objRequest->isPost()) {
@@ -263,7 +261,7 @@ class UsuarioController extends AbstractActionController {
             "id" => $this->id,
             "form" => $form,
             "title" => $this->title,
-            "objGrupo" => $arrayGrupo,
+            "objUser" => $arrayUser,
             "message" => $message,
             "lista_modulos" => $this->lista_modulos
         ));
