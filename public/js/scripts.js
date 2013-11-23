@@ -329,3 +329,72 @@ function delete_grupo_in_server(grupo_id) {
         }
     });
 }
+/**
+ * Método para eliminar un usuario
+ * @author Johnny Huamani<johnny1402@gmail.com>
+ * @param int grupo_id
+ * @returns string
+ */
+function delete_user(grupo_id) {
+    var n = noty({
+        text: 'Realmente deseas continuar, al eliminar un usuario posiblemente se eliminen sus accesos?',
+        type: 'confirm',
+        layout: 'top',
+        modal: true,
+        animation: {
+            open: {height: 'toggle'},
+            close: {height: 'toggle'},
+            easing: 'swing',
+            speed: 500 // opening & closing animation speed
+        },
+        buttons: [
+            {addClass: 'btn btn-primary', text: 'Ok', onClick: function($noty) {
+                    delete_user_in_server(grupo_id);
+                    $noty.close();
+                    //noty({force: true, text: 'You clicked "Ok" button', type: 'success', layout: 'top'});
+                }
+            },
+            {addClass: 'btn btn-danger', text: 'Cancel', onClick: function($noty) {
+                    $noty.close();
+                    //noty({force: true, text: 'You clicked "Cancel" button', type: 'error', layout: 'top'});
+                }
+            }
+        ],
+        /*timeout: true, */
+        //closeWith: ['hover'],
+        callback: {
+            /*afterClose: function() {
+             noty({
+             text: '<strong>Hehe!</strong> <br /> Sorry, you can catch me now.',
+             type: 'alert',
+             layout: 'topRight',
+             closeWith: ['click'],
+             });
+             }*/
+        }
+    });
+}
+/**
+ * Método para eliminar un usuario en el servidor
+ * @author Johnny Huamani<johnny1402@gmail.com>
+ * @param int user_id
+ * @returns string
+ */
+function delete_user_in_server(user_id) {
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: "usuario/delete",
+        data: "user_id=" + user_id,
+        success: function(datos) {
+            if (datos.result) {
+                //limpiamos el registro del modulo a eliminar
+                $("#user_" + user_id).empty();
+                //mostramos el mensaje a mostrar
+                noty({force: true, text: 'El usuario se eliminó en forma satisfactoria', type: 'success', layout: 'top'});
+            } else {
+                noty({force: true, text: 'Este usuario no está configurado para eliminar', type: 'information', layout: 'top'});
+            }
+        }
+    });
+}

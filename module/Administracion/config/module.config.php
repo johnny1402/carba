@@ -69,7 +69,8 @@ return array(
             'Administracion\Controller\Modulos' => 'Administracion\Controller\ModulosController',
             'Administracion\Controller\Menus' => 'Administracion\Controller\MenusController',
             'Administracion\Controller\Submenus' => 'Administracion\Controller\SubmenusController',
-            'Administracion\Controller\Grupo' => 'Administracion\Controller\GrupoController'
+            'Administracion\Controller\Grupo' => 'Administracion\Controller\GrupoController',
+            'Administracion\Controller\Usuario' => 'Administracion\Controller\UsuarioController'
         ),
     ),
     'view_manager' => array(

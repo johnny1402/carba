@@ -18,17 +18,20 @@ use Administracion\Model\Entity\Config;
 use Administracion\Model\Entity\Submenu;
 use Administracion\Model\Entity\Menu;
 use Administracion\Model\Entity\Modulo;
+use Administracion\Model\Entity\Grupo;
+use Administracion\Model\Entity\Usuario;
 use Zend\Json\Json;
-use Administracion\Form\FormMenu;
-use Administracion\Form\FormMenuValidate;
+use Administracion\Form\FormUsuario;
+use Administracion\Form\FormUsuarioValidate;
+
 
 /**
- * Clase para trabajar las varibles de configuración del sistema
+ * Clase para administrar los grupos
  * @version 0.1
  * @author Johnny Huamani <johnny1402@gmail.com>
  * @package Administracion
  */
-class MenusController extends AbstractActionController {
+class UsuarioController extends AbstractActionController {
 
     /**
      * atributo que sirve para el acceso al motor de datos
@@ -101,12 +104,16 @@ class MenusController extends AbstractActionController {
             return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/seguridad');
         }
         //$this->user = $session->user; 
-
+       
         $this->modulos = $this->getModulo($this->user->id);
+         
         $config = new Config($this->dbAdapter);
         $this->config = $config->getConfig();
+        
         $this->lista_modulos = $this->getPackage();
+        
         $uri = $this->getRequest()->getUri();
+        
         //seteamos el valor del identificador del submenu
         $this->setValueId($uri->getPath());
         $this->base = sprintf('%s://%s', $uri->getScheme(), $uri->getHost());
@@ -121,8 +128,8 @@ class MenusController extends AbstractActionController {
         $this->dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
         $this->iniciar();
         $this->layout('layout/administracion');
-        //obtenemos  la lista de menús
-        $lista_menus = $this->getListMenu();
+        //obtenemos  la lista de usuarios
+        $userList = $this->getListUser();
         //seteamos el submenú
         $session = new Container('seguridad');
         $session->submenu_id = $this->id;
@@ -133,26 +140,18 @@ class MenusController extends AbstractActionController {
             "modulo" => $this->modulos,
             "url" => $this->base,
             "id" => $this->id,
-            "lista_menu" => $lista_menus
+            "userList" => $userList
         ));
     }
 
     /**
-     * Método para obtener la lista de menus
+     * Método para obtener la lista de usuarios
      * @author Johnny Huamani <johnny1402@gmail.com>
      * @return array
      */
-    private function getListMenu() {
-        $objModelMenu = new Menu($this->dbAdapter);
-        $arrayValue = $objModelMenu->getMenu();
-        $objModelModulo = new Modulo($this->dbAdapter);
-        if (count($arrayValue) > 0) {
-            foreach ($arrayValue as $index => $arrayMenu) {
-                $arrayModulo = $objModelModulo->getModuleById($arrayMenu['int_modulo_id']);
-                $arrayMenu['chr_nombre_modulo'] = $arrayModulo['chr_nombre_publico'];
-                $arrayValue[$index] = $arrayMenu;
-            }
-        }
+    private function getListUser() {
+        $objModelUser = new Usuario($this->dbAdapter);
+        $arrayValue = $objModelUser->getUsers();
         return $arrayValue;
     }
 
@@ -191,29 +190,34 @@ class MenusController extends AbstractActionController {
     }
 
     /**
-     * Meétodo para eliminar menu, esta función será llamada desde ajax
+     * Método para eliminar usuario, esta función será llamada desde ajax
      * @author Johnny Huamani <johnny1402@gmail.com>
      */
     public function deleteAction() {
         $this->dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
         if ($this->getRequest()->isXmlHttpRequest()) {
             $post = $this->getRequest()->getPost();
-            $isDeleted = TRUE;
+            $isDeleted = FALSE;
+            if ($this->isRemovable($post['user_id'])) {
+                $isDeleted = TRUE;
+            }            
             //verificamos si se puede eliminar y procedemos a eliminar
-            $this->deleteMenu($post['menu_id']);
+            if($isDeleted){
+                $this->deleteUser($post['user_id']);
+            }
             $data = array('result' => $isDeleted);
             return $this->getResponse()->setContent(Json::encode($data));
         }
     }
 
     /**
-     * Método para eliminar el menu directamente en la Base de datos
+     * Método para eliminar el usuario directamente en la Base de datos
      * @author Johnny Huamani <johnny1402@gmail.com>
-     * @param int $module_id
+     * @param int $user_id
      */
-    private function deleteMenu($menu_id) {
-        $objModelModule = new Menu($this->dbAdapter);
-        $objModelModule->deleleMenu($menu_id);
+    private function deleteUser($user_id) {
+        $objModelUser = new Usuario($this->dbAdapter);
+        $objModelUser->deleteUser($user_id);
     }
 
     /**
@@ -224,23 +228,25 @@ class MenusController extends AbstractActionController {
     public function editarAction() {
         $this->dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
         $message = "";
-        $menu_id = (int) $this->params()->fromRoute('id', 0);
-        $objModelMenu = new Menu($this->dbAdapter);
-        $arrayMenu = $objModelMenu->getMenuById($menu_id);
+        $grupo_id = (int) $this->params()->fromRoute('id', 0);
+        $objModelGrupo = new Grupo($this->dbAdapter);
+        $arrayGrupo = $objModelGrupo->getGrupoById($grupo_id);
+        
         $this->iniciar();
-        $form = new FormMenu('formMenu');
-        $this->title = 'Editar menú';
+        
+        $form = new FormGrupo('formGrupo');
+        $this->title = 'Editar grupo';
         //verificamos si hay un request
         $objRequest = $this->getRequest();
         if ($objRequest->isPost()) {
-            $objFormModuleValidate = new FormMenuValidate();
-            $form->setValidationGroup(array('chr_nombre', 'int_order', 'csrf', 'int_modulo_id'));
+            $objFormModuleValidate = new FormGrupoValidate();
+            $form->setValidationGroup(array('chr_nombre_publico', 'int_order', 'csrf'));
             $form->setInputFilter($objFormModuleValidate->getInputFilter());
             $form->setData($objRequest->getPost());
             if ($form->isValid()) {
                 //ahora despues de validar los datos del formulario iniciamos la actualización
-                $this->saveMenu($objRequest->getPost());
-                return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/administracion/menus');
+                $this->saveGrupo($objRequest->getPost());
+                return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/administracion/grupo');
                 //return $this->forward()->dispatch('Administracion\Controller\Index', array('action'=>'index'));
             } else {
                 $message = "Ocurrio algún error";
@@ -257,7 +263,7 @@ class MenusController extends AbstractActionController {
             "id" => $this->id,
             "form" => $form,
             "title" => $this->title,
-            "objMenu" => $arrayMenu,
+            "objGrupo" => $arrayGrupo,
             "message" => $message,
             "lista_modulos" => $this->lista_modulos
         ));
@@ -268,9 +274,9 @@ class MenusController extends AbstractActionController {
      * @author Johnny Huamani <johnny1402@gmail.com>
      * @param object $objPost
      */
-    private function saveMenu($objPost) {
-        $objModelModule = new Menu($this->dbAdapter);
-        $objModelModule->saveMenu($objPost);
+    private function saveGrupo($objPost) {
+        $objModelGrupo = new Grupo($this->dbAdapter);
+        $objModelGrupo->saveGrupo($objPost);
     }
 
     /**
@@ -278,7 +284,7 @@ class MenusController extends AbstractActionController {
      * @author Johnny Huamani <johnny1402@gmail.com>
      */
     public function nuevoAction() {
-        return $this->forward()->dispatch('Administracion\Controller\Menus', array('action' => 'editar'));
+        return $this->forward()->dispatch('Administracion\Controller\Grupo', array('action' => 'editar'));
     }
 
     /**
@@ -299,6 +305,19 @@ class MenusController extends AbstractActionController {
         //var_dump($returnValue);
         return $returnValue;
     }
+    
+    /**
+     * Método para verificar si este usuario se puede eliminar
+     * @author Johnny Huamani <johnny1402@gmail.com>
+     * @param type $user_id
+     * @return boolean
+     */
+    private function isRemovable($user_id) {
+        $returValue = FALSE;
+        $objModelUser = new Usuario($this->dbAdapter);
+        $returValue = $objModelUser->isRemovable($user_id);
+        return $returValue;
+    }    
 
     private function vd($var) {
         echo "<pre>";
