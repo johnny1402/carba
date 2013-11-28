@@ -82,11 +82,11 @@ class Usuario extends TableGateway {
     }
     
     /**
-     * Método para registrar y/o actualizar un menu
+     * Método para registrar y/o actualizar un usuario
      * @author Johnny Huamani <johnny1402@gmail.com>
      * @param array $form
      */
-    public function saveGrupo($form) {
+    public function saveUser($form) {
         $session = new Container('seguridad');
         if (isset($form['bool_active'])) {
             $form['bool_active'] = 1;
@@ -98,19 +98,27 @@ class Usuario extends TableGateway {
             $form['fecha_creacion'] = date("Y-m-d H:i:s");
             $data = array(
                 'chr_nombre' => $form['chr_nombre'],
-                'chr_nombre_publico' => $form['chr_nombre_publico'],
-                'bool_active' => $form['bool_active'],
-                'int_order' => $form['int_order'],
-                'fecha_creacion' => date("Y-m-d H:i:s"),
-                'id_user_creacion' => $form['id_user_creacion']
+                'chr_apellido_paterno' => $form['chr_apellido_paterno'],
+                'chr_apellido_materno' => $form['chr_apellido_materno'],
+                'chr_telefono' => $form['chr_telefono'],
+                'chr_dni' => $form['chr_dni'],
+                'chr_email' => $form['chr_email'],
+                'chr_domicilio' => $form['chr_domicilio'],
+                'date_fecha_registro' => date("Y-m-d H:i:s"),
+                'int_usuario_actualizacion' => $session->user->id,
             );
         } else {
             $data = array(
                 'bool_active' => $form['bool_active'],
-                'int_order' => $form['int_order'],
-                'chr_nombre_publico' => $form['chr_nombre_publico'],
-                'id_user_actualizacion' => $session->user->id,
-                'fecha_actualizacion' => date("Y-m-d H:i:s")
+                'chr_nombre' => $form['chr_nombre'],
+                'chr_apellido_paterno' => $form['chr_apellido_paterno'],
+                'chr_apellido_materno' => $form['chr_apellido_materno'],
+                'chr_telefono' => $form['chr_telefono'],
+                'chr_dni' => $form['chr_dni'],
+                'chr_email' => $form['chr_email'],
+                'chr_domicilio' => $form['chr_domicilio'],
+                'int_usuario_actualizacion' => $session->user->id,
+                'date_fecha_actualizacion' => date("Y-m-d H:i:s")
             );
         }
 
@@ -118,10 +126,10 @@ class Usuario extends TableGateway {
         if ($id == 0) {
             $this->insert($data);
         } else {
-            if ($this->getGrupoById($id)) {
+            if ($this->getUserById($id)) {
                 $this->update($data, array('id' => $id));
             } else {
-                throw new \Exception('El Grupo no existe');
+                throw new \Exception('El Usuaario no existe');
             }
         }
     }    

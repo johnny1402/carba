@@ -48,6 +48,76 @@ echo $this->form()->openTag($form);
 </div>
 <div class="control-group">
     <?php
+    $chr_apellido_materno = $form->get('chr_apellido_materno');
+    $chr_apellido_materno->setValue($this->objUser->chr_apellido_materno);
+    
+    echo $this->formLabel($form->get('chr_apellido_materno')->setLabelAttributes(array('class'=>'control-label')));
+    //echo $formLabel->openTag().$chr_apellido_paterno->getOption('label');
+    //echo $formLabel->closeTag();
+    echo '<div class="controls">';
+    echo $this->formInput($chr_apellido_materno);
+    echo $this->formElementErrors($chr_apellido_materno);
+    echo '</div>';
+    ?>
+</div>
+<div class="control-group">
+    <?php
+    $chr_dni = $form->get('chr_dni');
+    $chr_dni->setValue($this->objUser->chr_dni);
+    
+    echo $this->formLabel($form->get('chr_dni')->setLabelAttributes(array('class'=>'control-label')));
+    //echo $formLabel->openTag().$chr_apellido_paterno->getOption('label');
+    //echo $formLabel->closeTag();
+    echo '<div class="controls">';
+    echo $this->formInput($chr_dni);
+    echo $this->formElementErrors($chr_dni);
+    echo '</div>';
+    ?>
+</div>
+<div class="control-group">
+    <?php
+    $chr_telefono = $form->get('chr_telefono');
+    $chr_telefono->setValue($this->objUser->chr_telefono);
+    
+    echo $this->formLabel($form->get('chr_telefono')->setLabelAttributes(array('class'=>'control-label')));
+    //echo $formLabel->openTag().$chr_apellido_paterno->getOption('label');
+    //echo $formLabel->closeTag();
+    echo '<div class="controls">';
+    echo $this->formInput($chr_telefono);
+    echo $this->formElementErrors($chr_telefono);
+    echo '</div>';
+    ?>
+</div>
+<div class="control-group">
+    <?php
+    $chr_domicilio = $form->get('chr_domicilio');
+    $chr_domicilio->setValue($this->objUser->chr_domicilio);
+    
+    echo $this->formLabel($form->get('chr_domicilio')->setLabelAttributes(array('class'=>'control-label')));
+    //echo $formLabel->openTag().$chr_apellido_paterno->getOption('label');
+    //echo $formLabel->closeTag();
+    echo '<div class="controls">';
+    echo $this->formInput($chr_domicilio);
+    echo $this->formElementErrors($chr_domicilio);
+    echo '</div>';
+    ?>
+</div>
+<div class="control-group">
+    <?php
+    $chr_email = $form->get('chr_email');
+    $chr_email->setValue($this->objUser->chr_email);
+    
+    echo $this->formLabel($form->get('chr_email')->setLabelAttributes(array('class'=>'control-label')));
+    //echo $formLabel->openTag().$chr_apellido_paterno->getOption('label');
+    //echo $formLabel->closeTag();
+    echo '<div class="controls">';
+    echo $this->formInput($chr_email);
+    echo $this->formElementErrors($chr_email);
+    echo '</div>';
+    ?>
+</div>
+<div class="control-group">
+    <?php
     $bool_active = $form->get('bool_active');
     if($this->objUser->bool_active){
         $bool_active->setAttribute('checked','checked');

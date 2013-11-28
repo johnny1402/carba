@@ -237,14 +237,14 @@ class UsuarioController extends AbstractActionController {
         //verificamos si hay un request
         $objRequest = $this->getRequest();
         if ($objRequest->isPost()) {
-            $objFormModuleValidate = new FormGrupoValidate();
-            $form->setValidationGroup(array('chr_nombre_publico', 'int_order', 'csrf'));
+            $objFormModuleValidate = new FormUserValidate();
+            $form->setValidationGroup(array('chr_nombre', 'chr_apellido_paterno','chr_telefono','chr_email','chr_dni', 'csrf'));
             $form->setInputFilter($objFormModuleValidate->getInputFilter());
             $form->setData($objRequest->getPost());
             if ($form->isValid()) {
                 //ahora despues de validar los datos del formulario iniciamos la actualización
-                $this->saveGrupo($objRequest->getPost());
-                return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/administracion/grupo');
+                $this->saveUser($objRequest->getPost());
+                return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/administracion/usuario');
                 //return $this->forward()->dispatch('Administracion\Controller\Index', array('action'=>'index'));
             } else {
                 $message = "Ocurrio algún error";
@@ -268,13 +268,13 @@ class UsuarioController extends AbstractActionController {
     }
 
     /**
-     * Método para recibir los datos del formulario y enviarlo almodelo para guardarlo
+     * Método para recibir los datos del formulario y enviarlo al modelo para guardarlo
      * @author Johnny Huamani <johnny1402@gmail.com>
      * @param object $objPost
      */
-    private function saveGrupo($objPost) {
-        $objModelGrupo = new Grupo($this->dbAdapter);
-        $objModelGrupo->saveGrupo($objPost);
+    private function saveUser($objPost) {
+        $objModelGrupo = new Usuario($this->dbAdapter);
+        $objModelGrupo->saveUser($objPost);
     }
 
     /**
@@ -282,7 +282,7 @@ class UsuarioController extends AbstractActionController {
      * @author Johnny Huamani <johnny1402@gmail.com>
      */
     public function nuevoAction() {
-        return $this->forward()->dispatch('Administracion\Controller\Grupo', array('action' => 'editar'));
+        return $this->forward()->dispatch('Administracion\Controller\Usuario', array('action' => 'editar'));
     }
 
     /**
