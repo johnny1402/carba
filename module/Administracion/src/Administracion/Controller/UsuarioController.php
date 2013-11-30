@@ -238,7 +238,11 @@ class UsuarioController extends AbstractActionController {
         $objRequest = $this->getRequest();
         if ($objRequest->isPost()) {
             $objFormModuleValidate = new FormUserValidate();
-            $form->setValidationGroup(array('chr_nombre', 'chr_apellido_paterno','chr_telefono','chr_email','chr_dni', 'csrf'));
+            if($user_id >0){
+                $form->setValidationGroup(array('chr_nombre', 'chr_apellido_paterno','chr_telefono','chr_email','chr_dni', 'csrf'));
+            }else{
+                $form->setValidationGroup(array('chr_usuario','chr_password','chr_nombre', 'chr_apellido_paterno','chr_telefono','chr_email','chr_dni', 'csrf'));
+            }
             $form->setInputFilter($objFormModuleValidate->getInputFilter());
             $form->setData($objRequest->getPost());
             if ($form->isValid()) {
@@ -261,7 +265,7 @@ class UsuarioController extends AbstractActionController {
             "id" => $this->id,
             "form" => $form,
             "title" => $this->title,
-            "objUser" => $arrayUser,
+            "arrayUser" => $arrayUser,
             "message" => $message,
             "lista_modulos" => $this->lista_modulos
         ));

@@ -12,6 +12,8 @@ use Zend\Validator\Csrf as CsrfValidator;
 
 class FormUserValidate implements InputFilterAwareInterface {
 
+    public $chr_usuario;
+    public $chr_password;
     public $chr_nombre;
     public $chr_apellido_paterno;
     public $chr_apellido_materno;
@@ -29,6 +31,8 @@ class FormUserValidate implements InputFilterAwareInterface {
         $this->chr_email = (isset($data['chr_email'])) ? $data['chr_email'] : null;
         $this->chr_telefono = (isset($data['chr_telefono'])) ? $data['chr_telefono'] : null;
         $this->csrf = (isset($data['csrf'])) ? $data['csrf'] : null;
+        $this->chr_usuario = (isset($data['chr_usuario'])) ? $data['chr_usuario'] : null;
+        $this->chr_password = (isset($data['chr_password'])) ? $data['chr_password'] : null;
     }
 
     public function setInputFilter(InputFilterInterface $inputFilter) {
@@ -40,6 +44,90 @@ class FormUserValidate implements InputFilterAwareInterface {
             $inputFilter = new InputFilter();
             $factory = new InputFactory();
 
+            $inputFilter->add($factory->createInput(array(
+                        'name' => 'chr_usuario',
+                        'required' => TRUE,
+                        'filters' => array(
+                            array('name' => 'StripTags'),
+                            array('name' => 'StringTrim')
+                        ),
+                        'validators' => array(
+                            array(
+                                'name' => 'StringLength',
+                                'options' => array(
+                                    'encoding' => 'UTF-8',
+                                    'min' => 4,
+                                    'max' => 20,
+                                    'messages' => array(
+                                        \Zend\Validator\StringLength::TOO_SHORT => 'Nombre del usuario muy pequeño',
+                                        \Zend\Validator\StringLength::TOO_LONG => 'Tamaño del usuario exagerado'
+                                    )
+                                )
+                            ),
+                            array(
+                                'name' => 'NotEmpty',
+                                'options' => array(
+                                    'messages' => array(
+                                        \Zend\Validator\NotEmpty::IS_EMPTY => 'El usuario no puede ser vacio'
+                                    )
+                                )
+                            )/*,
+                            array(
+                                'name' => 'Regex',
+                                'options' => array(
+                                    //'pattern' => '/^[a-zA-Z_][a-zA-Z_0-9]*$/',
+                                    //'pattern' => '/^[A-Za-záéíóúñ]{2,}([A-Za-záéíóúñ]{2,})+$/',
+                                    'pattern' => '/^[a-z0-9_-]{3,25}$/',
+                                    'messages' => array(
+                                        \Zend\Validator\Regex::INVALID => 'Nombre del menú no valido1',
+                                        \Zend\Validator\Regex::NOT_MATCH => 'Nombre del submenú no valido'
+                                    )
+                                )
+                            )*/
+                        )
+            )));
+            $inputFilter->add($factory->createInput(array(
+                        'name' => 'chr_password',
+                        'required' => TRUE,
+                        'filters' => array(
+                            array('name' => 'StripTags'),
+                            array('name' => 'StringTrim')
+                        ),
+                        'validators' => array(
+                            array(
+                                'name' => 'StringLength',
+                                'options' => array(
+                                    'encoding' => 'UTF-8',
+                                    'min' => 2,
+                                    'max' => 20,
+                                    'messages' => array(
+                                        \Zend\Validator\StringLength::TOO_SHORT => 'El password es muy pequeño',
+                                        \Zend\Validator\StringLength::TOO_LONG => 'Tamaño del password exagerado'
+                                    )
+                                )
+                            ),
+                            array(
+                                'name' => 'NotEmpty',
+                                'options' => array(
+                                    'messages' => array(
+                                        \Zend\Validator\NotEmpty::IS_EMPTY => 'El password no puede ser vacio'
+                                    )
+                                )
+                            )/*,
+                            array(
+                                'name' => 'Regex',
+                                'options' => array(
+                                    //'pattern' => '/^[a-zA-Z_][a-zA-Z_0-9]*$/',
+                                    //'pattern' => '/^[A-Za-záéíóúñ]{2,}([A-Za-záéíóúñ]{2,})+$/',
+                                    'pattern' => '/^[a-z0-9_-]{3,25}$/',
+                                    'messages' => array(
+                                        \Zend\Validator\Regex::INVALID => 'Nombre del menú no valido1',
+                                        \Zend\Validator\Regex::NOT_MATCH => 'Nombre del submenú no valido'
+                                    )
+                                )
+                            )*/
+                        )
+            )));
             $inputFilter->add($factory->createInput(array(
                         'name' => 'chr_nombre',
                         'required' => TRUE,

@@ -71,7 +71,7 @@ class Usuario extends TableGateway {
             $objUser->int_usuario_actualizacion='';
             $objUser->chr_email='';
             $objUser->is_deleted=1;
-            $row = $objGrupo;
+            $row = $objUser;
         } else {
             $where = new \Zend\Db\Sql\Where();
             $where->equalTo('id', $user_id);
@@ -97,6 +97,9 @@ class Usuario extends TableGateway {
             $form['id_user_creacion'] = $session->user->id;
             $form['fecha_creacion'] = date("Y-m-d H:i:s");
             $data = array(
+                'chr_usuario' => $form['chr_usuario'],
+                'chr_password' => md5($form['chr_password']),
+                'bool_active' => $form['bool_active'],
                 'chr_nombre' => $form['chr_nombre'],
                 'chr_apellido_paterno' => $form['chr_apellido_paterno'],
                 'chr_apellido_materno' => $form['chr_apellido_materno'],

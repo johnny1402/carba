@@ -40,7 +40,7 @@ class FormUser extends Form {
                   ), */
         ));
         $chr_password = $factory->createElement(array(
-            'type' => 'Zend\Form\Element\Text',
+            'type' => 'Zend\Form\Element\Password',
             'name' => 'chr_password',
             'options' => array(
                 'label' => 'Password',
@@ -187,6 +187,8 @@ class FormUser extends Form {
         ));
 
         $this->add($chr_nombre);
+        $this->add($chr_usuario);
+        $this->add($chr_password);
         $this->add($chr_apellido_paterno);
         $this->add($chr_apellido_materno);
         $this->add($date_fecha_nacimiento);
