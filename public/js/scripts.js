@@ -44,6 +44,20 @@ $(document).ready(function() {
             }
         });
     });
+    //buscador de usuarios en el submenu accesos
+    $("#form-search-user").submit(function(){
+        var formData = $("#form-search-user").serializeArray();
+        $.ajax({
+            type: "POST",
+            dataType: "html",
+            url: "acceso/search-user-ajax",
+            data: formData,
+            success: function(respuesta) {
+                $("#divResultado").html(respuesta);
+            }
+        });
+        return false;
+    });
 });
 
 //notificaciones

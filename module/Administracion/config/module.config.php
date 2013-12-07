@@ -70,7 +70,8 @@ return array(
             'Administracion\Controller\Menus' => 'Administracion\Controller\MenusController',
             'Administracion\Controller\Submenus' => 'Administracion\Controller\SubmenusController',
             'Administracion\Controller\Grupo' => 'Administracion\Controller\GrupoController',
-            'Administracion\Controller\Usuario' => 'Administracion\Controller\UsuarioController'
+            'Administracion\Controller\Usuario' => 'Administracion\Controller\UsuarioController',
+            'Administracion\Controller\Acceso' => 'Administracion\Controller\AccesoController'
         ),
     ),
     'view_manager' => array(
@@ -86,7 +87,8 @@ return array(
             'error/index'             => __DIR__ . '/../view/error/index.phtml',
         ),
         'template_path_stack' => array(
-            __DIR__ . '/../view',
+           'administracion'=> __DIR__ . '/../view',
+           'partial' => __DIR__ . '/../view/partial',
         ),
     ),
     // Placeholder for console routes

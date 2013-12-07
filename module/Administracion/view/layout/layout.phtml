@@ -64,7 +64,7 @@
                             <?php if (count($arrayModulo) > 0) { ?>
                                 <?php foreach ($arrayModulo as $index => $modulo) { ?>
                                     <?php $class_active = (isset($modulo['active'])&&$modulo['active'])? 'class="active"':''; ?>
-                                    <li <?php echo $class_active ?>><a href="<?php echo $arrayData['url'].DIRECTORY_SEPARATOR.$modulo['chr_nombre'] ?>"><?php echo $modulo['chr_nombre_publico'] ?></a></li>
+                                    <li <?php echo $class_active ?>><a href="<?php echo $arrayData['url'].'/'.$modulo['chr_nombre'] ?>"><?php echo $modulo['chr_nombre_publico'] ?></a></li>
                                 <?php } ?>
                             <?php } ?>
                             <li><a href="/seguridad/index/logout">Logout</a></li>

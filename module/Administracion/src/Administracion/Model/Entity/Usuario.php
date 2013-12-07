@@ -147,5 +147,11 @@ class Usuario extends TableGateway {
         print_r($var);
         echo "</pre>";
     }
+    
+    public function findUser($txtSearch){
+        $select = $this->getSql()->select()->where("chr_nombre LIKE '%".$txtSearch."%'")->order('id ASC');
+        $resultSet = $this->selectWith($select)->toArray();
+        return $resultSet; 
+    }
 
 }
