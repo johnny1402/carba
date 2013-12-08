@@ -116,6 +116,16 @@ class Grupo extends TableGateway {
                 throw new \Exception('El Grupo no existe');
             }
         }
+    }
+    
+    public function findGroup($txtSearch){
+        if(strlen(trim($txtSearch))>0){
+            $select = $this->getSql()->select()->where("chr_nombre_publico LIKE '%".$txtSearch."%'")->order('id ASC');
+        }else{
+            $select = $this->getSql()->select();
+        }
+        $resultSet = $this->selectWith($select)->toArray();
+        return $resultSet; 
     }    
     
     /**

@@ -1,0 +1,45 @@
+<h3>Lista de accesos por grupo</h3>
+<hr />
+<div class="accordion" id="accordion2">
+   <?php 
+   $array = array("1"=>"One","2"=>"Two", "3"=>"Three", "4"=>"Four", "5"=>"Five");
+   foreach ($this->listAccess as $index=>$module): ?> 
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+        <?php echo $module['chr_nombre_publico'] ?>
+      </a>
+    </div>
+    <div id="collapse<?php echo $array[$index+1] ?>" class="accordion-body collapse <?php echo ($index==0)?'in':'' ?>">
+      <div class="accordion-inner">
+        Anim pariatur cliche...
+      </div>
+    </div>
+  </div>        
+   <?php endforeach; ?>
+  <!--<div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+        Collapsible Group Item #1
+      </a>
+    </div>
+    <div id="collapseOne" class="accordion-body collapse in">
+      <div class="accordion-inner">
+        Anim pariatur cliche...
+      </div>
+    </div>
+  </div>
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+        Collapsible Group Item #2
+      </a>
+    </div>
+    <div id="collapseTwo" class="accordion-body collapse">
+      <div class="accordion-inner">
+        Anim pariatur cliche...
+      </div>
+    </div>
+  </div>-->
+    
+</div>

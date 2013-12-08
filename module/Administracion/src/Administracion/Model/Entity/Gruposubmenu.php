@@ -43,5 +43,15 @@ class Gruposubmenu extends TableGateway {
         $rowset = $this->select($where);
         return $rowset->toArray();
     }
+    
+    
+    public function getGrupoSubmenuByIdGroup($submenu_id, $grupo_id){
+        $where = new \Zend\Db\Sql\Where();
+        $where->equalTo('int_id_grupo', $grupo_id);
+        $where->equalTo('int_submenu_id', $submenu_id);
+        $rowset = $this->select($where);
+        $row = $rowset->toArray(); 
+        return $row;
+    }    
 
 }

@@ -19,5 +19,6 @@ class Gruposubmenu extends TableGateway{
         $returnValue = $rowset->toArray();
         return $returnValue;
     }
+
     
 }

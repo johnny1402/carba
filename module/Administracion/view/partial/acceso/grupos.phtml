@@ -1,0 +1,36 @@
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th></th>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Nombre público</th>
+            <th>Activo</th>
+            <th>acciones</th>            
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (count($this->listGroup) > 0) {
+            foreach ($this->listGroup as $indice => $group) {
+                ?>
+                <tr id="user_<?php echo $group['id'] ?>">
+                    <td></td>
+                    <td><?php echo intval($indice+1, 10) ?></td>
+                    <td><?php echo $group['chr_nombre'] ?></td>
+                    <td><?php echo $group['chr_nombre_publico'] ?></td>
+                    <td><?php echo intval($group['bool_active'], 10) ?></td>
+                    <td><a href="acceso/grupo/<?php echo $group['id'] ?>">Acceso</a></td>
+                </tr>
+                <?php
+            }
+        }
+        ?>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="7"></td>
+        </tr>
+    </tfoot>
+</table>

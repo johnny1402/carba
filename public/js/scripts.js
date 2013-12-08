@@ -45,12 +45,12 @@ $(document).ready(function() {
         });
     });
     //buscador de usuarios en el submenu accesos
-    $("#form-search-user").submit(function(){
-        var formData = $("#form-search-user").serializeArray();
+    $("#form-search-group").submit(function(){
+        var formData = $("#form-search-group").serializeArray();
         $.ajax({
             type: "POST",
             dataType: "html",
-            url: "acceso/search-user-ajax",
+            url: "acceso/search-group-ajax",
             data: formData,
             success: function(respuesta) {
                 $("#divResultado").html(respuesta);

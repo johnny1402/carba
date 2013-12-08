@@ -1,16 +1,13 @@
-<form id="form-search-user" class="form-search-user" action="" method="POST" onsubmit="return false;">
+<form id="form-search-group" class="form-search-group" action="" method="POST" onsubmit="return false;">
     <fieldset>
-        <legend>Acceso de usuarios</legend>
-        <input name="txtSearch" id="txtSearch" type="text" placeholder="buscar usuario">
+        <legend>Acceso de grupos</legend>
+        <input name="txtSearch" id="txtSearch" type="text" placeholder="buscar grupo">
         <button type="submit" class="btn">Buscar</button>
     </fieldset>
 </form>
 <hr />
-<div id="divResultado"><?php
-$model = array(
-    array('key' => 'Mammal', 'value' => 'Camel'),
-    array('key' => 'Bird', 'value' => 'Penguin'),
-    array('key' => 'Reptile', 'value' => 'Asp'),
-    array('key' => 'Fish', 'value' => 'Flounder'),
-);
-//var_dump($this->partial('acceso/usuarios.phtml',$model)); ?></div>
+<div id="divResultado">
+    <?php 
+    $list = array("listGroup"=>$this->listGroup);
+    echo $this->partial('acceso/grupos.phtml',$list); ?>
+</div>

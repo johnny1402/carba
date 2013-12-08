@@ -20,6 +20,7 @@ use Administracion\Model\Entity\Menu;
 use Administracion\Model\Entity\Modulo;
 use Administracion\Model\Entity\Grupo;
 use Administracion\Model\Entity\Usuario;
+use Administracion\Model\Entity\Gruposubmenu;
 use Zend\Json\Json;
 use Administracion\Form\FormUser;
 use Administracion\Form\FormUserValidate;
@@ -129,8 +130,8 @@ class AccesoController extends AbstractActionController {
         $this->iniciar();
         $this->layout('layout/administracion');
         //obtenemos  la lista de usuarios
-        //$userList = $this->getListUser();
-        //seteamos el submenú
+        $objModelGrupo = new Grupo($this->dbAdapter);
+        $listGroup = $objModelGrupo->getGrupo();
         $session = new Container('seguridad');
         $session->submenu_id = $this->id;
         return new ViewModel(array(
@@ -139,8 +140,8 @@ class AccesoController extends AbstractActionController {
             "package" => $this->name_module,
             "modulo" => $this->modulos,
             "url" => $this->base,
-            "id" => $this->id
-            //"userList" => $userList
+            "id" => $this->id,
+            "listGroup" => $listGroup
         ));
     }
 
@@ -321,18 +322,88 @@ class AccesoController extends AbstractActionController {
         return $returValue;
     }
     
-    public function searchUserAjaxAction(){
+    public function searchGroupAjaxAction(){
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
             $post = $this->getRequest()->getPost();
-            $objModelUser = new Usuario($this->dbAdapter);
-            $users = $objModelUser->findUser($post['txtSearch']);
+            $objModelGroup = new Grupo($this->dbAdapter);
+            $groups = $objModelGroup->findGroup($post['txtSearch']);
             $result = new ViewModel();
             $result->setTerminal(true);
-            $result->setVariables(array('usuario'=>'Johnny'));
-            $result->setTemplate('acceso/usuarios.phtml');
+            $result->setVariables(array('listGroup'=>$groups));
+            $result->setTemplate('acceso/grupos.phtml');
             return $result;
         }
+    }
+    
+    /**
+     * @author Johnny Huamani <johnny1402@gmail.com>
+     * 
+     */
+    public function grupoAction(){
+        $this->dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
+        $this->iniciar();
+        $this->layout('layout/administracion');
+        $session = new Container('seguridad');
+        $group_id = (int) $this->params()->fromRoute('id', 0);
+        $listAccess = $this->_getAccessByIdGroup($group_id);
+        $session->submenu_id = $this->id;
+        $objModelGrupo = new Grupo($this->dbAdapter);
+        $listGroup = $objModelGrupo->getGrupo();
+        return new ViewModel(array(
+            "objUser" => $this->user,
+            "config" => $this->config,
+            "package" => $this->name_module,
+            "modulo" => $this->modulos,
+            "url" => $this->base,
+            "id" => $this->id,
+            "listGroup" => $listGroup,
+            'listAccess'=>$listAccess
+        ));       
+    }
+    /**
+     * 
+     * @param int $group_id
+     * @return array
+     */
+    private function _getAccessByIdGroup($group_id){
+        //listamos los modulo, menus y submenus totales 
+        $objModelGroup = new Modulo($this->dbAdapter);
+        $listModule = $objModelGroup->getPackage();
+        if(count($listModule)>0){
+            foreach ($listModule as $index=>$module){
+               $objModelMenu = new Menu($this->dbAdapter);
+               $listMenu = $objModelMenu->getMenuByIdModulo($module['id']);
+               if(count($listMenu)>0){
+                   foreach ($listMenu as $indice=>$menu){
+                       $objModelSubmenu = new Submenu($this->dbAdapter);
+                       $listSubmenu = $objModelSubmenu->getSubmenuByIdMenu($menu['id']);
+                       if(count($listSubmenu)>0){
+                           foreach ($listSubmenu as $puntero=>$submenu){
+                               $submenu['access']=$this->_access($submenu, $group_id);
+                               $listSubmenu[$puntero] = $submenu;
+                           }
+                       }
+                       $menu['submenu'] = $listSubmenu;
+                       $listMenu[$indice] = $menu;
+                   }
+               }
+               $module['menu'] = $listMenu;
+               $listModule[$index] = $module;
+            }
+        }
+        return $listModule;
+    }
+    
+    private function _access($submenu, $grupo_id){
+        $returnValue = 0;
+        //obtenemos los Id de los submenus para listar sus accesos
+        $objModelGroupSubmenu = new Gruposubmenu($this->dbAdapter);
+        $listGroupSubmenu = $objModelGroupSubmenu->getGrupoSubmenuByIdGroup($submenu['id'], $grupo_id);
+        if(count($listGroupSubmenu)>0){
+            $returnValue=1;
+        }
+        return $returnValue;
     }
 
     private function vd($var) {
