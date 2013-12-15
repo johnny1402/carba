@@ -12,6 +12,7 @@
         echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
                 ->prependStylesheet($this->basePath() . '/css/bootstrap-responsive.min.css')
                 ->prependStylesheet($this->basePath() . '/css/administracion.css')
+                ->prependStylesheet($this->basePath() . '/css/bootstrap-checkbox.css')
                 ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css')
         ?>
 
@@ -19,6 +20,7 @@
         <?php
         echo $this->headScript()->prependFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
                 ->prependFile($this->basePath() . '/js/scripts.js')
+                ->prependFile($this->basePath() . '/js/bootstrap-checkbox.js')
                 ->prependFile($this->basePath() . '/js/noty/themes/default.js')
                 ->prependFile($this->basePath() . '/js/noty/layouts/topRight.js')
                 ->prependFile($this->basePath() . '/js/noty/layouts/topLeft.js')

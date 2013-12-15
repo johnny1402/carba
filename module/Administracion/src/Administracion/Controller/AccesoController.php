@@ -335,6 +335,42 @@ class AccesoController extends AbstractActionController {
             return $result;
         }
     }
+    /**
+     * Método llamado x ajax para actulizar la lista de accesos por grupo
+     * @author Johnny Huamani <johnny1402@gmail.com>
+     */
+    public function actualizarAccesoAction(){
+       if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
+            $post = $this->getRequest()->getPost();
+            if($post['data'] == '0'){
+                $this->_limpiarAcceso($post['grupo_id']);
+            }else{
+                $this->_limpiarAcceso($post['grupo_id']);
+                $arrayGoupId = explode('-', $post['data']);
+                foreach ($arrayGoupId as $index=>$acceso){
+                    $data = array("int_id_grupo"=>$post['grupo_id'], "int_submenu_id"=>$acceso);
+                    $this->_updateAccessList($data);                    
+                }
+            }
+            $returnValue = array('result' => "1","url"=>$this->getRequest()->getBaseUrl() . '/administracion/acceso');
+            return $this->getResponse()->setContent(Json::encode($returnValue));
+       } 
+    }
+    
+    private function _updateAccessList($arrayGroup){
+        if(is_array($arrayGroup)){
+            if(count($arrayGroup)>0){
+                $objModelGruposubmenu = new Gruposubmenu($this->dbAdapter);
+                $objModelGruposubmenu->updateAccessList($arrayGroup);
+            }
+        }
+    }
+    
+    private function _limpiarAcceso($grupo_id){
+        $objModelGruposubmenu = new Gruposubmenu($this->dbAdapter);
+        $objModelGruposubmenu->limpiarAcceso($grupo_id);
+    }
     
     /**
      * @author Johnny Huamani <johnny1402@gmail.com>
@@ -358,7 +394,8 @@ class AccesoController extends AbstractActionController {
             "url" => $this->base,
             "id" => $this->id,
             "listGroup" => $listGroup,
-            'listAccess'=>$listAccess
+            'listAccess'=>$listAccess,
+            "grupo_id"=>$group_id
         ));       
     }
     /**

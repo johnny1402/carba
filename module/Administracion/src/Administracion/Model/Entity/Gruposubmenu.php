@@ -53,5 +53,15 @@ class Gruposubmenu extends TableGateway {
         $row = $rowset->toArray(); 
         return $row;
     }    
+    
+    public function limpiarAcceso($grupo_id){
+        $where = new \Zend\Db\Sql\Where();
+        $where->equalTo('int_id_grupo', $grupo_id);
+        $this->delete($where);        
+    }
+    
+    public function updateAccessList($arrayGroup){
+        $this->insert($arrayGroup);
+    }
 
 }

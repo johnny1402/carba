@@ -1,45 +1,36 @@
 <h3>Lista de accesos por grupo</h3>
 <hr />
-<div class="accordion" id="accordion2">
+<p>
+  <button class="btn btn-large btn-primary btnSaveAccess" type="button">Guardar</button>
+</p>
+<ul class="nav nav-tabs nav-stacked">
    <?php 
-   $array = array("1"=>"One","2"=>"Two", "3"=>"Three", "4"=>"Four", "5"=>"Five");
-   foreach ($this->listAccess as $index=>$module): ?> 
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-        <?php echo $module['chr_nombre_publico'] ?>
-      </a>
-    </div>
-    <div id="collapse<?php echo $array[$index+1] ?>" class="accordion-body collapse <?php echo ($index==0)?'in':'' ?>">
-      <div class="accordion-inner">
-        Anim pariatur cliche...
-      </div>
-    </div>
-  </div>        
+   foreach ($this->listAccess as $index=>$module): ?>
+    <li>
+        <a href="#"><?php echo $module['chr_nombre_publico'] ?></a>
+        <?php if(count($module['menu'])>0): ?>
+            <?php foreach($module['menu'] as $indice=>$menu):?>
+                <ul class="nav nav-tabs nav-stacked">
+                    <li style="margin-left:20px;">
+                        <a href="#"><?php echo $menu['chr_nombre'] ?></a>
+                        <?php if(count($menu['submenu'])>0): ?>
+                        <table class="table">
+                            <?php foreach($menu['submenu'] as $puntero=>$submenu):?>
+                            <tr>
+                                <td><?php echo $submenu['chr_nombre'] ?></td>
+                                <td><input name="chkAccess" type="checkbox" class="style2" <?php echo ($submenu['access'] )?'checked="checked"':'' ?> value="<?php echo $submenu['id'] ?>" /></td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </table>
+                        <?php endif; ?>
+                    </li>
+                </ul>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </li> 
    <?php endforeach; ?>
-  <!--<div class="accordion-group">
-    <div class="accordion-heading">
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-        Collapsible Group Item #1
-      </a>
-    </div>
-    <div id="collapseOne" class="accordion-body collapse in">
-      <div class="accordion-inner">
-        Anim pariatur cliche...
-      </div>
-    </div>
-  </div>
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-        Collapsible Group Item #2
-      </a>
-    </div>
-    <div id="collapseTwo" class="accordion-body collapse">
-      <div class="accordion-inner">
-        Anim pariatur cliche...
-      </div>
-    </div>
-  </div>-->
-    
-</div>
+</ul>
+<p>
+  <button class="btn btn-large btn-primary btnSaveAccess" type="button">Guardar</button>
+  <input type="hidden" name="grupo_id" id="grupo_id" value="<?php echo $this->grupo_id ?>" />
+</p>

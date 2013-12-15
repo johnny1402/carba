@@ -58,6 +58,34 @@ $(document).ready(function() {
         });
         return false;
     });
+    //estilo para los checkbox
+    $('input[type="checkbox"].style2').checkbox({
+        buttonStyle: 'btn-base',
+        buttonStyleChecked: 'btn-success',
+        checkedClass: 'icon-check',
+        uncheckedClass: 'icon-check-empty'
+    });
+    //boton guardar acesos
+    $(".btnSaveAccess").click(function(){
+  var valor= [];
+        $(':checkbox:checked').each(function(i){
+          valor[i] = $(this).val();
+        });
+        var accesos = valor.join('-');
+        var cadena = 0;
+        if(accesos.length>0){
+            cadena = accesos;
+        }
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/administracion/acceso/actualizar-acceso",
+            data: 'data='+cadena+'&grupo_id='+$("#grupo_id").val(),
+            success: function(respuesta) {
+                window.location.replace(respuesta.url);
+            }
+        });        
+    });
 });
 
 //notificaciones
