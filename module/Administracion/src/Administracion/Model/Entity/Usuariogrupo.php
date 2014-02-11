@@ -23,5 +23,12 @@ class Usuariogrupo extends TableGateway {
         $returnValue = $rowset->toArray();
         return $returnValue;
     }
+    
+    public function getUserByIdGrupo($grupo_id){
+        $returnValue = array();
+        $rowset = $this->select(array('int_grupo_id' => $grupo_id));
+        $returnValue = $rowset->toArray();
+        return $returnValue;       
+    }
 
 }

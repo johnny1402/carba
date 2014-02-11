@@ -12,16 +12,16 @@
     </thead>
     <tbody>
         <?php
-        if (count($this->listGroup) > 0) {
-            foreach ($this->listGroup as $indice => $group) {
+        if (count($this->listUser) > 0) {
+            foreach ($this->listUser as $indice => $user) {
                 ?>
-                <tr id="user_<?php echo $group['id'] ?>">
+                <tr id="user_<?php echo $user['id'] ?>">
                     <td></td>
                     <td><?php echo intval($indice+1, 10) ?></td>
-                    <td><?php echo $group['chr_nombre'] ?></td>
-                    <td><?php echo $group['chr_nombre_publico'] ?></td>
-                    <td><?php echo intval($group['bool_active'], 10) ?></td>
-                    <td><a href="acceso/grupo/<?php echo $group['id'] ?>">Acceso</a>&nbsp;|&nbsp;<a href="acceso/usuarios/<?php echo $group['id'] ?>">Usuarios</a></td>
+                    <td><?php echo $user['chr_nombre'] ?></td>
+                    <td><?php echo $user['chr_apellido_paterno'] ?></td>
+                    <td><?php echo intval($user['bool_active'], 10) ?></td>
+                    <td><a href="#">Quitar</a></td>
                 </tr>
                 <?php
             }

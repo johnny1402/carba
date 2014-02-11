@@ -1,0 +1,13 @@
+<form id="form-search-user" class="form-search-user" action="" method="POST" onsubmit="return false;">
+    <fieldset>
+        <legend>User list</legend>
+        <input name="txtSearch" id="txtSearch" type="text" placeholder="buscar usuarios">
+        <button type="submit" class="btn">Search</button>
+    </fieldset>
+</form>
+<hr />
+<div id="divResultado">
+    <?php 
+    $list = array("listUser"=>$this->arrayUser);
+    echo $this->partial('acceso/usuarios.phtml',$list); ?>
+</div>

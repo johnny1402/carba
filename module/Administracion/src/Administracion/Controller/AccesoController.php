@@ -21,6 +21,7 @@ use Administracion\Model\Entity\Modulo;
 use Administracion\Model\Entity\Grupo;
 use Administracion\Model\Entity\Usuario;
 use Administracion\Model\Entity\Gruposubmenu;
+use Administracion\Model\Entity\Usuariogrupo;
 use Zend\Json\Json;
 use Administracion\Form\FormUser;
 use Administracion\Form\FormUserValidate;
@@ -441,6 +442,41 @@ class AccesoController extends AbstractActionController {
             $returnValue=1;
         }
         return $returnValue;
+    }
+    /**
+     * lista de usuarios x grupo
+     * @author Johnny Huamani <johnny1402@gmail.com>
+     * @return html
+     */
+    public function usuariosAction(){
+        $this->dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
+        $this->iniciar();
+        $this->layout('layout/administracion');
+        $grupo_id = (int) $this->params()->fromRoute('id', 0);
+        $objModelUsuario = new Usuariogrupo($this->dbAdapter);
+        $arrayGrupoUsuario = $objModelUsuario->getUserByIdGrupo($grupo_id);
+        $usuarioId = array();
+        $arrayUser = array();
+        if(count($arrayGrupoUsuario)>0){
+            foreach ($arrayGrupoUsuario as $puntero=>$grupoUsuario){
+                array_push($usuarioId, $grupoUsuario['int_usuario_id']);
+            }
+        $objModelUsuario = new Usuario($this->dbAdapter);
+        $arrayUser = $objModelUsuario->getUserList($usuarioId);
+            
+        }
+        return new ViewModel(array(
+            "objUser" => $this->user,
+            "config" => $this->config,
+            "package" => $this->name_module,
+            "modulo" => $this->modulos,
+            "url" => $this->base,
+            "id" => $this->id,
+            "arrayUser" => $arrayUser,
+            //"message" => $message,
+            "lista_modulos" => $this->lista_modulos
+        ));
+    
     }
 
     private function vd($var) {

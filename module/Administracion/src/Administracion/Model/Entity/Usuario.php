@@ -24,6 +24,18 @@ class Usuario extends TableGateway {
         return $resultSet;
     }
     /**
+     * 
+     * @param array $arrayUserId
+     */
+    public function getUserList($arrayUserId){
+        $where = new \Zend\Db\Sql\Where();
+        $where->in('id', $arrayUserId);
+        $where->in('bool_active', array(1));
+        $rowset = $this->select($where);
+        $row = $rowset->toArray();
+        return $row;        
+    }
+    /**
      * Método para verificar si este usuario se puede eliminar
      * @author Johnny Huamani <johnny1402@gmail.com>
      * @param type $user_id
