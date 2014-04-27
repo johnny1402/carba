@@ -51,6 +51,16 @@ class Modulo extends TableGateway {
         $resultSet = $rowset->current();
         return $resultSet;
     }
+    
+    public function existModuleByName($chrName, $idModule){
+        $returnValue = TRUE;
+        $rowset = $this->select(array('chr_nombre_publico' => $chrName));
+        $resultSet = $rowset->current();
+        if(is_bool($resultSet)){
+            $returnValue = FALSE;
+        }
+        return $returnValue;
+    }
 
     /**
      * Obtener el modulo x el ID

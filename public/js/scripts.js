@@ -25,8 +25,7 @@
  },
  buttons: false // an array of buttons
  };*/
-
-$(document).ready(function() {
+$(function(){
     $("#int_modulo_id").change(function() {
         $.ajax({
             type: "POST",
@@ -86,6 +85,63 @@ $(document).ready(function() {
             }
         });        
     });
+    
+    // SUBMIT MODULOS
+    $("#btnModuleSubmit").click(function(){
+        var chrNombre = $("#chr_module_nombre_publico").val();
+        if(chrNombre.length > 0){
+            if($.isNumeric($("#int_module_order").val())){
+                //verificamos si el módulo ya existe
+                var arrayValue = $('#formModule').serialize();
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: "/administracion/modulos/validate",
+                    data: arrayValue,
+                    success: function(datos) {
+                        if (datos.result) {
+                            $("#formModule").submit();
+                        } else {
+                            noty({force: true, text: datos.msg, type: 'warning', layout: 'top'});
+                        }
+                    }
+                });                
+            }else{
+                noty({force: true, text: 'El orden tiene que ser un valor numérico.', type: 'warning', layout: 'top'});
+            }
+        }else{
+            noty({force: true, text: 'El nombre del módulo es necesario', type: 'warning', layout: 'top'});
+        }
+    });
+    
+    //SUBMIT MENUS
+    $("#btnMenuSubmit").click(function(){
+        var chrNombre = $("#chr_menu_nombre").val();
+        if(chrNombre.length > 0){
+            if($.isNumeric($("#int_menu_order").val())){
+                //verificamos si el módulo ya existe
+                var arrayValue = $('#formMenu').serialize();
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: "/administracion/menus/validate",
+                    data: arrayValue,
+                    success: function(datos) {
+                        if (datos.result) {
+                            $("#formMenu").submit();
+                        } else {
+                            noty({force: true, text: datos.msg, type: 'warning', layout: 'top'});
+                        }
+                    }
+                });                
+            }else{
+                noty({force: true, text: 'El orden tiene que ser un valor numérico.', type: 'warning', layout: 'top'});
+            }
+        }else{
+            noty({force: true, text: 'El nombre del menú es necesario', type: 'warning', layout: 'top'});
+        }
+    });    
+    
 });
 
 //notificaciones

@@ -10,23 +10,15 @@
         <!-- Le styles -->
         <?php
         echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
-                ->prependStylesheet($this->basePath() . '/css/offcanvas.css')
-                //->prependStylesheet($this->basePath() . '/css/administracion.css')
-                //->prependStylesheet($this->basePath() . '/css/bootstrap-checkbox.css')
+                ->prependStylesheet($this->basePath() . '/css/bootstrap-responsive.min.css')
+                ->prependStylesheet($this->basePath() . '/css/administracion.css')
+                ->prependStylesheet($this->basePath() . '/css/bootstrap-checkbox.css')
                 ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css')
         ?>
 
         <!-- Scripts -->
-        <!-- Just for debugging purposes. Don't actually copy this line! -->
-        <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-          <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-          <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->        
         <?php
-        echo $this->headScript()
+        echo $this->headScript()->prependFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
                 ->prependFile($this->basePath() . '/js/scripts.js')
                 ->prependFile($this->basePath() . '/js/bootstrap-checkbox.js')
                 ->prependFile($this->basePath() . '/js/noty/themes/default.js')
@@ -43,7 +35,6 @@
                 ->prependFile($this->basePath() . '/js/noty/layouts/bottomCenter.js')
                 ->prependFile($this->basePath() . '/js/noty/layouts/bottom.js')
                 ->prependFile($this->basePath() . '/js/noty/jquery.noty.js')
-                ->prependFile($this->basePath() . '/js/offcanvas.js')
                 ->prependFile($this->basePath() . '/js/bootstrap.min.js')
                 ->prependFile($this->basePath() . '/js/jquery.min.js')
         ?>
@@ -51,43 +42,45 @@
     </head>
     <body>
         <?php
-        $arrayController = $this->viewModel()->getCurrent()->getChildren();
-        $arrayData = $arrayController[0]->getVariables();
-        $objUser = $arrayData['objUser'];
-        $config = $arrayData['config'];
-        $arrayModulo = $arrayData['modulo'];
+            $arrayController = $this->viewModel()->getCurrent()->getChildren();
+            $arrayData = $arrayController[0]->getVariables();
+            $objUser = $arrayData['objUser'];
+            $config = $arrayData['config'];
+            $arrayModulo = $arrayData['modulo'];
         ?>
-        <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container-fluid">
+                    <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#" title="<?php echo $config['siteNameLarge'] ?>"><?php echo $config['siteNameSmall'] ?></a>
-                </div>
-                <div class="collapse navbar-collapse">
-                    <p class="navbar-text pull-right">
-                        Logged in as <a href="#" class="navbar-link"><?php echo $objUser->chr_nombre ?></a>
-                    </p>                    
-                    <ul class="nav navbar-nav">
-                        <?php if (count($arrayModulo) > 0) { ?>
-                            <?php foreach ($arrayModulo as $index => $modulo) { ?>
-                                <?php $class_active = (isset($modulo['active'])&&$modulo['active'])? 'class="active"':''; ?>
-                                <li <?php echo $class_active ?>><a href="<?php echo $arrayData['url'].'/'.$modulo['chr_nombre'] ?>"><?php echo $modulo['chr_nombre_publico'] ?></a></li>
+                    <a class="brand" href="#" title="<?php echo $config['siteNameLarge'] ?>"><?php echo $config['siteNameSmall'] ?></a>
+                    <div class="nav-collapse collapse">
+                        <p class="navbar-text pull-right">
+                            Logged in as <a href="#" class="navbar-link"><?php echo $objUser->chr_nombre ?></a>
+                        </p>
+                        <ul class="nav">
+                            <!--<li class="active"><a href="#">Home</a></li>-->
+                            <?php if (count($arrayModulo) > 0) { ?>
+                                <?php foreach ($arrayModulo as $index => $modulo) { ?>
+                                    <?php $class_active = (isset($modulo['active'])&&$modulo['active'])? 'class="active"':''; ?>
+                                    <li <?php echo $class_active ?>><a href="<?php echo $arrayData['url'].'/'.$modulo['chr_nombre'] ?>"><?php echo $modulo['chr_nombre_publico'] ?></a></li>
+                                <?php } ?>
                             <?php } ?>
-                        <?php } ?>
-                        <li><a href="/seguridad/index/logout">Logout</a></li>
-                    </ul>
-                </div><!-- /.nav-collapse -->
-            </div><!-- /.container -->
-        </div><!-- /.navbar -->
-        <div class="container">
-            <div class="row row-offcanvas row-offcanvas-right">
-                <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
-                    <div class="list-group">
+                            <li><a href="/seguridad/index/logout">Logout</a></li>
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span3">
+                    <div class="well sidebar-nav">
+                        <ul class="nav nav-list">
                             <?php 
                                 //obtenemos los menus del  modulo
                                 foreach ($arrayModulo as $indice=>$listaModulo){
@@ -98,9 +91,7 @@
                                 $arrayMenu = $arrayMenuPackage['menu'];
                                 if(count($arrayMenu)>0){
                                     foreach ($arrayMenu as $index=>$menu){
-                                        //echo '<li class="nav-header">'.$menu['chr_nombre'].'</li>';
-                                        echo '<a href="#" class="list-group-item active">'.$menu['chr_nombre'].'</a>';
-                                        echo '<ul class="nav nav-list">';
+                                        echo '<li class="nav-header">'.$menu['chr_nombre'].'</li>';
                                         if(count($menu['submenu'])>0){
                                             foreach($menu['submenu'] as $indice=>$submenu){
                                                 $class_active_submenu = '';
@@ -110,21 +101,21 @@
                                                 echo '<li '.$class_active_submenu.'><a href="'.$arrayData['url'].$submenu['chr_url'].'">'.$submenu['chr_nombre'].'</a></li>';
                                             }
                                         }
-                                        echo '</ul>';
                                     }
                                 }
                             ?>
-                    </div>
+                        </ul>
+                    </div><!--/.well -->
                 </div><!--/span-->
-                <div class="col-xs-12 col-sm-9">
+                <div class="span9">
                     <?php echo $this->content; ?>
                 </div><!--/span-->
             </div><!--/row-->
-            <hr>
-            <footer>
-                <p>&copy; Company 2014</p>
+            <footer class="navbar navbar-fixed-bottom">
+                <p>&copy; Company 2013</p>
             </footer>
-        </div><!--/.container-->
-        <?php echo $this->inlineScript() ?>
+
+        </div>
+<?php echo $this->inlineScript() ?>
     </body>
 </html>

@@ -9,7 +9,8 @@ $form->setAttributes(array(
     //'action' => '/seguridad/index/validate',
     'action' => '',
     'method' => 'post',
-    'class' => 'form-horizontal'
+    'class' => 'form-horizontal',
+    'role'=>'form',
 ));
 
 $formLabel = $this->plugin('formLabel');
@@ -18,50 +19,52 @@ echo $this->form()->openTag($form);
 ?>
  <fieldset>
 <legend><?php echo $this->title ?></legend>
-<div class="control-group">
+<div class="form-group">
     <?php
     $int_modulo_id = $form->get('int_modulo_id');
     $int_modulo_id->setValue($this->objMenu->int_modulo_id);
     
-    echo $this->formLabel($form->get('int_modulo_id')->setLabelAttributes(array('class'=>'control-label')));
+    echo $this->formLabel($form->get('int_modulo_id')->setLabelAttributes(array('class'=>'col-sm-2 control-label')));
     //echo $formLabel->openTag().$chr_nombre->getOption('label');
     //echo $formLabel->closeTag();
     $int_modulo_id->setValueOptions($this->lista_modulos);
-    echo '<div class="controls">';
+    echo '<div class="col-sm-10">';
     echo $this->formSelect($int_modulo_id);
     echo $this->formElementErrors($int_modulo_id);
     echo '</div>';
     ?>    
 </div>
-<div class="control-group">
+<div class="form-group">
     <?php
     $chr_nombre = $form->get('chr_nombre');
     $chr_nombre->setValue($this->objMenu->chr_nombre);
     
-    echo $this->formLabel($form->get('chr_nombre')->setLabelAttributes(array('class'=>'control-label')));
+    echo $this->formLabel($form->get('chr_nombre')->setLabelAttributes(array('class'=>'col-sm-2 control-label')));
     //echo $formLabel->openTag().$chr_nombre->getOption('label');
     //echo $formLabel->closeTag();
-    echo '<div class="controls">';
+    echo '<div class="col-sm-10">';
     echo $this->formInput($chr_nombre);
     echo $this->formElementErrors($chr_nombre);
     echo '</div>';
     ?>    
 </div>
-<div class="control-group">
+<div class="form-group">
     <?php
     $int_order = $form->get('int_order');
     $int_order->setValue($this->objMenu->int_order);
     
-    echo $this->formLabel($form->get('int_order')->setLabelAttributes(array('class'=>'control-label')));
+    echo $this->formLabel($form->get('int_order')->setLabelAttributes(array('class'=>'col-sm-2 control-label')));
     //echo $formLabel->openTag().$int_order->getOption('label');
     //echo $formLabel->closeTag();
-    echo '<div class="controls">';
+    echo '<div class="col-sm-10">';
     echo $this->formInput($int_order);
     echo $this->formElementErrors($int_order);
     echo '</div>';
     ?>
 </div>
-<div class="control-group">
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <div class="checkbox">    
     <?php
     $bool_active = $form->get('bool_active');
     if($this->objMenu->bool_active){
@@ -70,17 +73,19 @@ echo $this->form()->openTag($form);
     echo $this->formLabel($form->get('bool_active')->setLabelAttributes(array('class'=>'control-label')));
     //echo $formLabel->openTag().$bool_active->getOption('label');
     //echo $formLabel->closeTag();
-    echo '<div class="controls">';
+    echo '<label>';
     echo $this->formInput($bool_active);
     echo $this->formElementErrors($bool_active);
-    echo '</div>';
+    echo '</label>';
     ?>
+        </div>
+    </div>
 </div>
-<div class="control-group">
+<div class="form-group">
     <?php
     $btnSubmit = $form->get('btnSubmit');
     //echo $formLabel->openTag().$email->getOption('label');
-    echo '<div class="controls">';
+    echo '<div class="col-sm-offset-2 col-sm-10">';
     echo $this->formInput($btnSubmit);
     echo '</div>';
     //echo $formLabel->closeTag();

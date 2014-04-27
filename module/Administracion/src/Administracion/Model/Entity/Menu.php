@@ -219,6 +219,16 @@ class Menu extends TableGateway {
             }
         }
     }
+    
+    public function existMenuByName($chrName, $idModulo){
+        $returnValue = TRUE;
+        $rowset = $this->select(array('chr_nombre' => $chrName, 'int_modulo_id'=>$idModulo));
+        $resultSet = $rowset->current();
+        if(is_bool($resultSet)){
+            $returnValue = FALSE;
+        }
+        return $returnValue;        
+    }
 
     /**
      * Método para imprimir variables

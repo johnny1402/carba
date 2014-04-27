@@ -189,6 +189,33 @@ class ModulosController extends AbstractActionController {
             $this->setId($session->submenu_id);
         }
     }
+    
+    public function validateAction(){
+        $this->dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $post = $this->getRequest()->getPost();
+            $idModule = $post['id'];
+            $returnValue = 1;
+            $msg = '';
+            if($this->existModuleByName($post['chr_nombre_publico'], $idModule)){
+                if($idModule > 0){
+                    $returnValue = 1;
+                }else{
+                    $returnValue = 0;
+                    $msg = 'El nombre del módulo ya se encuentra registrado';
+                }
+            }
+            $data = array('result' => $returnValue, 'msg'=>$msg);
+            return $this->getResponse()->setContent(Json::encode($data));            
+        }
+    }
+    
+    public function existModuleByName($chrName, $idModule){
+        $this->dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
+        $objModelModule = new Modulo($this->dbAdapter);
+        $returValue = $objModelModule->existModuleByName($chrName, $idModule);
+        return $returValue;        
+    }
 
     /**
      * Meétodo para eliminar modulos, esta función será llamada desde ajax
@@ -247,7 +274,11 @@ class ModulosController extends AbstractActionController {
         $objModule = $objModelModule->getModuleById($module_id);
         $this->iniciar();
         $form = new FormModule('formModule');
-        $this->title = 'Editar módulo';
+        if($module_id>0){
+            $this->title = 'Editar módulo';
+        }else{
+            $this->title = 'Crear nuevo módulo';
+        }
         //verificamos si hay un request
         $objRequest = $this->getRequest();
         if ($objRequest->isPost()) {

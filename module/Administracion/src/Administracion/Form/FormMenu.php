@@ -37,6 +37,8 @@ class FormMenu extends Form {
             ),
             'attributes' => array(
                 'placeholder' => 'Orden',
+                'class'=>'form-control',
+                'id'=>'int_menu_order'
             ),
         ));
 
@@ -48,10 +50,12 @@ class FormMenu extends Form {
                 'label_attributes' => array(
                     'class' => 'control-label'
                 )
-            )/* ,
-                  'attributes' => array(
-                  'readonly' => 'readonly',
-                  ), */
+            ),
+            'attributes' => array(
+                'placeholder' => 'Nombre',
+                'class'=>'form-control',
+                'id'=>'chr_menu_nombre'
+            ),
         ));
 
         $bool_active = $factory->createElement(array(
@@ -68,11 +72,12 @@ class FormMenu extends Form {
             ),
         ));
         $submit = $factory->createElement(array(
-            'type' => 'Zend\Form\Element\Submit',
+            'type' => 'Zend\Form\Element\Button',
             'name' => 'btnSubmit',
             'attributes' => array(
                 'class' => 'btn btn-large btn-primary',
-                'value' => 'Guardar'
+                'value' => 'Guardar',
+                'id' => 'btnMenuSubmit'
             ),
         ));
         $id = $factory->createElement(array(
@@ -85,6 +90,7 @@ class FormMenu extends Form {
             'name' => 'int_modulo_id',
             'attributes' => array(
                 'id' => 'int_modulo_id',
+                'class'=>'form-control',
                 'options' => array(
                     '1' => 'Hi, Im a test!',
                     '3' => 'Bar',

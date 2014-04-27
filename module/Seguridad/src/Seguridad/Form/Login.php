@@ -37,7 +37,7 @@ class Login extends Form {
                 'label' => 'Usuario',
             ),
             'attributes' => array(
-                'class' => 'input-block-level',
+                'class' => 'form-control',
                 'placeholder' => 'Usuario',
             ),
         ));
@@ -48,7 +48,7 @@ class Login extends Form {
                 'label' => 'Contraseña',
             ),
             'attributes' => array(
-                'class' => 'input-block-level',
+                'class' => 'form-control',
                 'placeholder' => 'Contraseña',
             ),
         ));
@@ -56,7 +56,7 @@ class Login extends Form {
             'type' => 'Zend\Form\Element\Submit',
             'name' => 'btnSubmit',
             'attributes' => array(
-                'class' => 'btn btn-large btn-primary',
+                'class' => 'btn btn-lg btn-primary btn-block',
                 'placeholder' => 'Contraseña',
                 'value' => 'Enviar'
             ),

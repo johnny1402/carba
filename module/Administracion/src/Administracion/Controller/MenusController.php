@@ -215,6 +215,34 @@ class MenusController extends AbstractActionController {
         $objModelModule = new Menu($this->dbAdapter);
         $objModelModule->deleleMenu($menu_id);
     }
+    
+    public function validateAction(){
+        $this->dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $post = $this->getRequest()->getPost();
+            $idMenu = $post['id'];
+            $idModulo = $post['int_modulo_id'];
+            $returnValue = 1;
+            $msg = '';
+            if($this->existMenuByName($post['chr_nombre'], $idModulo)){
+                if($idMenu > 0){
+                    $returnValue = 1;
+                }else{
+                    $returnValue = 0;
+                    $msg = 'El nombre del menú ya se encuentra registrado';
+                }
+            }
+            $data = array('result' => $returnValue, 'msg'=>$msg);
+            return $this->getResponse()->setContent(Json::encode($data));            
+        }
+    }
+    
+    public function existMenuByName($chrName, $idModulo){
+        $this->dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
+        $objModelModule = new Menu($this->dbAdapter);
+        $returValue = $objModelModule->existMenuByName($chrName, $idModulo);
+        return $returValue;        
+    }
 
     /**
      * Método para vargar la vista de edición de menus
@@ -229,7 +257,11 @@ class MenusController extends AbstractActionController {
         $arrayMenu = $objModelMenu->getMenuById($menu_id);
         $this->iniciar();
         $form = new FormMenu('formMenu');
-        $this->title = 'Editar menú';
+        if($menu_id>0){
+            $this->title = 'Editar menú';
+        }else{
+            $this->title = 'Crear nuevo menú';
+        }        
         //verificamos si hay un request
         $objRequest = $this->getRequest();
         if ($objRequest->isPost()) {

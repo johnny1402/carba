@@ -9,7 +9,8 @@ $form->setAttributes(array(
     //'action' => '/seguridad/index/validate',
     'action' => '',
     'method' => 'post',
-    'class' => 'form-horizontal'
+    'class' => 'form-horizontal',
+    'role' => 'form'
 ));
 
 $formLabel = $this->plugin('formLabel');
@@ -18,68 +19,77 @@ echo $this->form()->openTag($form);
 ?>
  <fieldset>
 <legend><?php echo $this->title ?></legend>
-<div class="control-group">
+<?php if($this->message):?>
+    <div class="alert alert-warning alert-dismissable" id="divMessage">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <strong>Alerta!</strong> <?php echo $this->message;?>.
+    </div>
+<?php endif;?>
+<div class="form-group">
     <?php
     $chr_nombre = $form->get('chr_nombre');
     $chr_nombre->setValue($this->objModule->chr_nombre);
     
-    echo $this->formLabel($form->get('chr_nombre')->setLabelAttributes(array('class'=>'control-label')));
+    echo $this->formLabel($form->get('chr_nombre')->setLabelAttributes(array('class'=>'col-sm-2 control-label')));
     //echo $formLabel->openTag().$chr_nombre->getOption('label');
     //echo $formLabel->closeTag();
-    echo '<div class="controls">';
+    echo '<div class="col-sm-10">';
     echo $this->formInput($chr_nombre);
     echo $this->formElementErrors($chr_nombre);
     echo '</div>';
     ?>    
 </div>
-<div class="control-group">
+<div class="form-group">
     <?php
     $chr_nombre_publico = $form->get('chr_nombre_publico');
     $chr_nombre_publico->setValue($this->objModule->chr_nombre_publico);
     
-    echo $this->formLabel($form->get('chr_nombre_publico')->setLabelAttributes(array('class'=>'control-label')));
+    echo $this->formLabel($form->get('chr_nombre_publico')->setLabelAttributes(array('class'=>'col-sm-2 control-label')));
     //echo $formLabel->openTag().$chr_nombre_publico->getOption('label');
     //echo $formLabel->closeTag();
-    echo '<div class="controls">';
+    echo '<div class="col-sm-10">';
     echo $this->formInput($chr_nombre_publico);
     echo $this->formElementErrors($chr_nombre_publico);
     echo '</div>';
     ?>
 </div>
-<div class="control-group">
+<div class="form-group">
     <?php
     $int_order = $form->get('int_order');
     $int_order->setValue($this->objModule->int_order);
     
-    echo $this->formLabel($form->get('int_order')->setLabelAttributes(array('class'=>'control-label')));
+    echo $this->formLabel($form->get('int_order')->setLabelAttributes(array('class'=>'col-sm-2 control-label')));
     //echo $formLabel->openTag().$int_order->getOption('label');
     //echo $formLabel->closeTag();
-    echo '<div class="controls">';
+    echo '<div class="col-sm-10">';
     echo $this->formInput($int_order);
     echo $this->formElementErrors($int_order);
     echo '</div>';
     ?>
 </div>
-<div class="control-group">
-    <?php
-    $bool_active = $form->get('bool_active');
-    if($this->objModule->bool_active){
-        $bool_active->setAttribute('checked','checked');
-    }
-    echo $this->formLabel($form->get('bool_active')->setLabelAttributes(array('class'=>'control-label')));
-    //echo $formLabel->openTag().$bool_active->getOption('label');
-    //echo $formLabel->closeTag();
-    echo '<div class="controls">';
-    echo $this->formInput($bool_active);
-    echo $this->formElementErrors($bool_active);
-    echo '</div>';
-    ?>
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <div class="checkbox">
+        <?php
+        $bool_active = $form->get('bool_active');
+        if($this->objModule->bool_active){
+            $bool_active->setAttribute('checked','checked');
+        }
+        echo $this->formLabel($form->get('bool_active')->setLabelAttributes(array('class'=>'control-label')));
+        echo '<label>';
+        echo $this->formInput($bool_active);
+        echo $this->formElementErrors($bool_active);
+        echo '</label>';
+        ?>
+        </div>
+    </div>
+
 </div>
-<div class="control-group">
+<div class="form-group">
     <?php
     $btnSubmit = $form->get('btnSubmit');
     //echo $formLabel->openTag().$email->getOption('label');
-    echo '<div class="controls">';
+    echo '<div class="col-sm-offset-2 col-sm-10">';
     echo $this->formInput($btnSubmit);
     echo '</div>';
     //echo $formLabel->closeTag();
@@ -96,8 +106,3 @@ echo $this->form()->openTag($form);
 ?>
  </fieldset>
 <?php echo $this->form()->closeTag(); ?>
-<?php
-    if($this->message){
-        echo $this->message;
-    }
-?>
